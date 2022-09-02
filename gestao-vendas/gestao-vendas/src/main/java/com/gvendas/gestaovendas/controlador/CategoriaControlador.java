@@ -45,6 +45,7 @@ public class CategoriaControlador {
         return categoria.isPresent() ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
     }
 
+    //@valid irá aplicar as constrints bean validatio da class produto @NotNull e @Length
     @ApiOperation(value = "Salvar", nickname = "salvar")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
