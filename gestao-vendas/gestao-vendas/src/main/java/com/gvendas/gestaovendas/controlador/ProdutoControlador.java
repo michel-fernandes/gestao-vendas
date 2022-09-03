@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,5 +69,13 @@ public class ProdutoControlador {
     public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto){
         Produto produtoSalvo = produtoServico.salvar(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
+    }
+
+    @ApiOperation(value = "Atualizar", nickname = "atualizarProduto")
+    @PutMapping("/{codigo}")
+    //@valid irá aplicar as constrints bean validatio da class produto @NotNull e @Length
+    public ResponseEntity<Produto> atualizar(@PathVariable(name="codigo") Long codigo, @Valid @RequestBody Produto produto){
+        Produto produtoSalvo = produtoServico.atualizar(codigo, produto);
+        return ResponseEntity.ok(produtoSalvo);
     }
 }
