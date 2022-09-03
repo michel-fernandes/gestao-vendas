@@ -32,13 +32,13 @@ public class CategoriaControlador {
     @Autowired
     private CategoriaServico categoriaServico;
 
-    @ApiOperation(value = "Listar", nickname = "listarTodas")
+    @ApiOperation(value = "Listar", nickname = "listarTodasCategoria")
     @GetMapping
     public List<Categoria> listarTodas(){
         return categoriaServico.listarTodas();
     }
 
-    @ApiOperation(value = "Listar por código", nickname = "buscarPorCodigo")
+    @ApiOperation(value = "Listar por código", nickname = "buscarCategoriaPorCodigo")
     @GetMapping("/{codigo}")
     public ResponseEntity<Optional<Categoria>> buscarPorCodigo(@PathVariable(name="codigo") Long codigo){
         Optional<Categoria> categoria =categoriaServico.buscarPorCodigo(codigo);
@@ -46,20 +46,20 @@ public class CategoriaControlador {
     }
 
     //@valid irá aplicar as constrints bean validatio da class produto @NotNull e @Length
-    @ApiOperation(value = "Salvar", nickname = "salvar")
+    @ApiOperation(value = "Salvar", nickname = "salvarCategoria")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
         Categoria categoriaSalva = categoriaServico.salvar(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
     }
 
-    @ApiOperation(value = "Atualizar", nickname = "atualizar")
+    @ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name="codigo") Long codigo, @Valid @RequestBody Categoria categoria){
         return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoria));
     }
 
-    @ApiOperation(value = "Deletar", nickname = "deletar")
+    @ApiOperation(value = "Deletar", nickname = "deletarCategoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable(name="codigo") Long codigo, @Valid @RequestBody Categoria categoria){

@@ -52,6 +52,13 @@ public class ProdutoServico {
         return produtoRepositorio.save(produto);
     }
 
+    public void deletar(Long codigo) {
+        Produto produto = validarProdutoExiste(codigo);
+        produtoRepositorio.delete(produto);
+        
+        //também poderia utilizar o método do deleteById(codigo) da class JpaRepository;
+    }
+
     private Produto validarProdutoExiste(Long codigo) {
         Optional<Produto> buscarPorCodigo = buscarPorCodigo(codigo);
         if (buscarPorCodigo.isEmpty()) {
