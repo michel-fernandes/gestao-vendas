@@ -25,6 +25,10 @@ public class Categoria {
         this.nome = nome;
     }
 
+    public Categoria(Long codigo) {
+        this.codigo = codigo;
+    }
+
     public Categoria(long codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;

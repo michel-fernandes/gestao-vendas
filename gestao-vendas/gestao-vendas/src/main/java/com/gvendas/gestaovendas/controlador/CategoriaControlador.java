@@ -66,9 +66,8 @@ public class CategoriaControlador {
     @PutMapping("/{codigo}")
     public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable(name = "codigo") Long codigo,
             @Valid @RequestBody CategoriaRequestDTO categoriaDTO) {
-        Categoria categoria = categoriaDTO.convertParaEntidade(codigo);
-        return ResponseEntity
-                .ok(CategoriaResponseDTO.converterParaCategoriaDTO(categoriaServico.atualizar(codigo, categoria)));
+        Categoria categoriaAtualizada = categoriaServico.atualizar(codigo, categoriaDTO.convertParaEntidade(codigo));
+        return ResponseEntity.ok(CategoriaResponseDTO.converterParaCategoriaDTO(categoriaAtualizada));
     }
 
     @ApiOperation(value = "Deletar", nickname = "deletarCategoria")

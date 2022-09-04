@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gvendas.gestaovendas.dto.produto.ProdutoRequestDTO;
 import com.gvendas.gestaovendas.dto.produto.ProdutoResponseDTO;
 import com.gvendas.gestaovendas.entidades.Produto;
 import com.gvendas.gestaovendas.servico.ProdutoServico;
@@ -72,19 +73,19 @@ public class ProdutoControlador {
     @PostMapping
     // @valid irá aplicar as constrints bean validatio da class produto @NotNull e
     // @Length
-    public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto) {
-        Produto produtoSalvo = produtoServico.salvar(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
+    public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody ProdutoRequestDTO produtoDTO) {
+        Produto produtoSalvo = produtoServico.salvar(produtoDTO.converterParaEntidade(produtoDTO.getCodigoCategoria()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProdutoResponseDTO.converterParaResponseDTO(produtoSalvo));
     }
 
     @ApiOperation(value = "Atualizar", nickname = "atualizarProduto")
     @PutMapping("/{codigo}")
     // @valid irá aplicar as constrints bean validatio da class produto @NotNull e
     // @Length
-    public ResponseEntity<Produto> atualizar(@PathVariable(name = "codigo") Long codigo,
-            @Valid @RequestBody Produto produto) {
-        Produto produtoSalvo = produtoServico.atualizar(codigo, produto);
-        return ResponseEntity.ok(produtoSalvo);
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable(name = "codigo") Long codigo,
+            @Valid @RequestBody ProdutoRequestDTO produtoDTO) {
+        Produto produtoAtualizado = produtoServico.atualizar(codigo, produtoDTO.converterParaEntidade(codigo, produtoDTO.getCodigoCategoria()));
+        return ResponseEntity.ok(ProdutoResponseDTO.converterParaResponseDTO(produtoAtualizado));
     }
 
     @ApiOperation(value = "Deletar", nickname = "deletarProduto")

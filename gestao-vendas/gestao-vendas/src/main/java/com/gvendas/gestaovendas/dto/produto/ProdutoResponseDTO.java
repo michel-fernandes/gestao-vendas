@@ -14,7 +14,7 @@ public class ProdutoResponseDTO {
     @ApiModelProperty(value = "Código")
     private long codigo;
 
-    @ApiModelProperty(value = "Secrição")
+    @ApiModelProperty(value = "Descrição")
     private String descricao;
 
     @ApiModelProperty(value = "Quantidade")
