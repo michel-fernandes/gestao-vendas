@@ -1,4 +1,4 @@
-package com.gvendas.gestaovendas.dto;
+package com.gvendas.gestaovendas.dto.categoria;
 
 import com.gvendas.gestaovendas.entidades.Categoria;
 
@@ -23,7 +23,7 @@ public class CategoriaResponseDTO {
     public static CategoriaResponseDTO converterParaCategoriaDTO(Categoria categoria){
         return new CategoriaResponseDTO(categoria.getCodigo(), categoria.getNome());
     }
-    
+
     public long getCodigo() {
         return codigo;
     }
