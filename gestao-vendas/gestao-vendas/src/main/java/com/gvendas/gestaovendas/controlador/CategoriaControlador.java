@@ -2,6 +2,7 @@ package com.gvendas.gestaovendas.controlador;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gvendas.gestaovendas.dto.CategoriaResponseDTO;
 import com.gvendas.gestaovendas.entidades.Categoria;
 import com.gvendas.gestaovendas.servico.CategoriaServico;
 
@@ -28,41 +30,47 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaControlador {
-    
+
     @Autowired
     private CategoriaServico categoriaServico;
 
     @ApiOperation(value = "Listar", nickname = "listarTodasCategoria")
     @GetMapping
-    public List<Categoria> listarTodas(){
-        return categoriaServico.listarTodas();
+    public List<CategoriaResponseDTO> listarTodas() {
+        return categoriaServico.listarTodas().stream()
+                .map(categoria -> CategoriaResponseDTO.converterParaCategoriaDTO(categoria))
+                .collect(Collectors.toList());
     }
 
     @ApiOperation(value = "Listar por código", nickname = "buscarCategoriaPorCodigo")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Categoria>> buscarPorCodigo(@PathVariable(name="codigo") Long codigo){
-        Optional<Categoria> categoria =categoriaServico.buscarPorCodigo(codigo);
-        return categoria.isPresent() ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+    public ResponseEntity<CategoriaResponseDTO> buscarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
+        Optional<Categoria> categoria = categoriaServico.buscarPorCodigo(codigo);
+        return categoria.isPresent()
+                ? ResponseEntity.ok(CategoriaResponseDTO.converterParaCategoriaDTO(categoria.get()))
+                : ResponseEntity.notFound().build();
     }
 
-    //@valid irá aplicar as constrints bean validatio da class produto @NotNull e @Length
+    // @valid irá aplicar as constrints bean validatio da class produto @NotNull e
+    // @Length
     @ApiOperation(value = "Salvar", nickname = "salvarCategoria")
     @PostMapping
-    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
+    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaServico.salvar(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
     }
 
     @ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
-    public ResponseEntity<Categoria> atualizar(@PathVariable(name="codigo") Long codigo, @Valid @RequestBody Categoria categoria){
+    public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
+            @Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoria));
     }
 
     @ApiOperation(value = "Deletar", nickname = "deletarCategoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable(name="codigo") Long codigo, @Valid @RequestBody Categoria categoria){
+    public void deletar(@PathVariable(name = "codigo") Long codigo, @Valid @RequestBody Categoria categoria) {
         categoriaServico.deletar(codigo);
     }
 }
