@@ -73,7 +73,7 @@ public class CategoriaControlador {
     @ApiOperation(value = "Deletar", nickname = "deletarCategoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable(name = "codigo") Long codigo, @Valid @RequestBody Categoria categoria) {
+    public void deletar(@PathVariable(name = "codigo") Long codigo, @Valid @RequestBody CategoriaRequestDTO categoriaDTO) {
         categoriaServico.deletar(codigo);
     }
 }

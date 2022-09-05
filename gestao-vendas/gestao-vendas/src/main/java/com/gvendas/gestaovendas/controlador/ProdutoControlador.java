@@ -37,7 +37,6 @@ public class ProdutoControlador {
     private ProdutoServico produtoServico;
 
     @ApiOperation(value = "Listar", nickname = "listarTodosProduto")
-
     @GetMapping
     public List<ProdutoResponseDTO> listarTodos() {
         return produtoServico.listarTodos().stream()
@@ -71,8 +70,7 @@ public class ProdutoControlador {
 
     @ApiOperation(value = "Salvar", nickname = "salvarProduto")
     @PostMapping
-    // @valid irá aplicar as constrints bean validatio da class produto @NotNull e
-    // @Length
+    // @valid irá aplicar as constraints bean validator da class produto @NotNull e @Length
     public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody ProdutoRequestDTO produtoDTO) {
         Produto produtoSalvo = produtoServico.salvar(produtoDTO.converterParaEntidade(produtoDTO.getCodigoCategoria()));
         return ResponseEntity.status(HttpStatus.CREATED).body(ProdutoResponseDTO.converterParaResponseDTO(produtoSalvo));
@@ -80,8 +78,7 @@ public class ProdutoControlador {
 
     @ApiOperation(value = "Atualizar", nickname = "atualizarProduto")
     @PutMapping("/{codigo}")
-    // @valid irá aplicar as constrints bean validatio da class produto @NotNull e
-    // @Length
+    // @valid irá aplicar as constraints bean validator da class produto @NotNull e @Length
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable(name = "codigo") Long codigo,
             @Valid @RequestBody ProdutoRequestDTO produtoDTO) {
         Produto produtoAtualizado = produtoServico.atualizar(codigo, produtoDTO.converterParaEntidade(codigo, produtoDTO.getCodigoCategoria()));

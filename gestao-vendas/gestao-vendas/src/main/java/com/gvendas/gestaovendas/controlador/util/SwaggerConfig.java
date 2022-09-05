@@ -1,5 +1,6 @@
 package com.gvendas.gestaovendas.controlador.util;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -12,10 +13,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
     
+    @Bean
     public Docket configuracao(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.vendas"))
+                .apis(RequestHandlerSelectors.basePackage("com.gvendas"))
                 .build()
                 .apiInfo(informacaoAPI());
     }

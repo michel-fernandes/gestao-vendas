@@ -97,4 +97,12 @@ public class ProdutoResponseDTO {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+    public CategoriaResponseDTO getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaResponseDTO categoria) {
+        this.categoria = categoria;
+    }
 }
