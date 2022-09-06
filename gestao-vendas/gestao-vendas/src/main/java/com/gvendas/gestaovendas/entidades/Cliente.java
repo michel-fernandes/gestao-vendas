@@ -33,6 +33,15 @@ public class Cliente {
     public Cliente() {
     }
 
+    
+    public Cliente(long codigo, String nome, String telefone, boolean ativo, Endereco endereco) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.ativo = ativo;
+        this.endereco = endereco;
+    }
+
     public Cliente(String nome, String telefone, boolean ativo, Endereco endereco) {
         this.nome = nome;
         this.telefone = telefone;

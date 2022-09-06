@@ -35,11 +35,18 @@ public class ClienteRequestDTO {
     @Valid
     private EnderencoRequestDTO enderencoRequestDTO;
 
-    public Cliente converterParaEntidadeCliente(@Valid ClienteRequestDTO clienteRequestDTO) {
+    public Cliente converterParaEntidadeCliente() {
         Endereco endereco = new Endereco(enderencoRequestDTO.getLogradouro(), enderencoRequestDTO.getNumero(),
                 enderencoRequestDTO.getComplemento(), enderencoRequestDTO.getBairro(), enderencoRequestDTO.getCep(),
                 enderencoRequestDTO.getCidade(), enderencoRequestDTO.getEstado());
         return new Cliente(nome, telefone, ativo, endereco);
+    }
+
+    public Cliente converterParaEntidadeCliente(Long codigo) {
+        Endereco endereco = new Endereco(enderencoRequestDTO.getLogradouro(), enderencoRequestDTO.getNumero(),
+                enderencoRequestDTO.getComplemento(), enderencoRequestDTO.getBairro(), enderencoRequestDTO.getCep(),
+                enderencoRequestDTO.getCidade(), enderencoRequestDTO.getEstado());
+        return new Cliente(codigo, nome, telefone, ativo, endereco);
     }
 
     public String getNome() {
