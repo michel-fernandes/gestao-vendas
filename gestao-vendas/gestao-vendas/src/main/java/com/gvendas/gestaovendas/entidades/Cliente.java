@@ -29,6 +29,16 @@ public class Cliente {
 
     @Embedded
     private Endereco endereco;
+   
+    public Cliente() {
+    }
+
+    public Cliente(String nome, String telefone, boolean ativo, Endereco endereco) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.ativo = ativo;
+        this.endereco = endereco;
+    }
 
     public long getCodigo() {
         return codigo;
