@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.gvendas.gestaovendas.dto.venda.ClienteVendaResponseDTO;
 import com.gvendas.gestaovendas.dto.venda.ItemResponseDTO;
@@ -17,6 +18,7 @@ import com.gvendas.gestaovendas.excecao.RegraDeNegocioException;
 import com.gvendas.gestaovendas.repositorio.ItemVendaRepositorio;
 import com.gvendas.gestaovendas.repositorio.VendaRepositorio;
 
+@Service
 public class VendaServico {
 
     private ClienteServico clienteServico;
