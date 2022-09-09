@@ -10,7 +10,7 @@ import com.gvendas.gestaovendas.entidades.Venda;
 
 public abstract class AbstractVendaServico {
     
-    protected VendaResponseDTO criaVendaResponseDTO(Venda venda, List<ItemVenda> itensVendaList) {
+    protected VendaResponseDTO criarVendaResponseDTO(Venda venda, List<ItemVenda> itensVendaList) {
         List<ItemResponseDTO> itensVendaResponseDTO = itensVendaList.stream()
                 .map(this::criaItensResponseDTO).collect(Collectors.toList());
         return new VendaResponseDTO(venda.getCodigo(), venda.getData(), itensVendaResponseDTO);

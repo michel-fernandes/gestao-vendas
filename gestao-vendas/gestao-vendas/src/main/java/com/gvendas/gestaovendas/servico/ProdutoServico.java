@@ -2,7 +2,6 @@ package com.gvendas.gestaovendas.servico;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.gvendas.gestaovendas.repositorio.ProdutoRepositorio;
 import com.gvendas.gestaovendas.entidades.Produto;
@@ -59,10 +58,10 @@ public class ProdutoServico {
         //também poderia utilizar o método do deleteById(codigo) da class JpaRepository;
     }
 
-    private Produto validarProdutoExiste(Long codigo) {
+    protected Produto validarProdutoExiste(Long codigo) {
         Optional<Produto> buscarPorCodigo = buscarPorCodigo(codigo);
         if (buscarPorCodigo.isEmpty()) {
-            throw new EmptyResultDataAccessException(1);
+            throw new RegraDeNegocioException(String.format("O produto de código %s não está cadastrado", codigo));
         }
         return buscarPorCodigo.get();
     }
