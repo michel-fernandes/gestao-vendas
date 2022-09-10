@@ -18,7 +18,6 @@ import com.gvendas.gestaovendas.entidades.Produto;
 import com.gvendas.gestaovendas.entidades.Venda;
 import com.gvendas.gestaovendas.excecao.RegraDeNegocioException;
 import com.gvendas.gestaovendas.repositorio.ItemVendaRepositorio;
-import com.gvendas.gestaovendas.repositorio.ProdutoRepositorio;
 import com.gvendas.gestaovendas.repositorio.VendaRepositorio;
 
 @Service
@@ -42,14 +41,14 @@ public class VendaServico extends AbstractVendaServico {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
         List<VendaResponseDTO> vendasResponseDTOList = vendaRepositorio.findByClienteCodigo(codigoCliente).stream()
                 .map(vendaCliente -> criarVendaResponseDTO(vendaCliente,
-                        itemVendaRepositorio.findByVendaCodigo(vendaCliente.getCodigo())))
+                        itemVendaRepositorio.findByVendaPorCodigo(vendaCliente.getCodigo())))
                 .collect(Collectors.toList());
         return new ClienteVendaResponseDTO(cliente.getNome(), vendasResponseDTOList);
     }
 
     public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
         Venda vendaCliente = validarVendaExiste(codigoVenda);
-        List<ItemVenda> itensVendaList = itemVendaRepositorio.findByVendaCodigo(vendaCliente.getCodigo());
+        List<ItemVenda> itensVendaList = itemVendaRepositorio.findByVendaPorCodigo(vendaCliente.getCodigo());
         return new ClienteVendaResponseDTO(vendaCliente.getCliente().getNome(),
                 Arrays.asList(criarVendaResponseDTO(vendaCliente, itensVendaList)));
 
@@ -60,7 +59,7 @@ public class VendaServico extends AbstractVendaServico {
         validarProdutoExiste(vendaDTO.getItemRequestDTOs());
         Venda vendaSalva = salvarVenda(cliente, vendaDTO);
         return new ClienteVendaResponseDTO(vendaSalva.getCliente().getNome(), Arrays.asList(
-                criarVendaResponseDTO(vendaSalva, itemVendaRepositorio.findByVendaCodigo(vendaSalva.getCodigo()))));
+                criarVendaResponseDTO(vendaSalva, itemVendaRepositorio.findByVendaPorCodigo(vendaSalva.getCodigo()))));
     }
 
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaDTO) {
