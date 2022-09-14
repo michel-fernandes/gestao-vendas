@@ -1,12 +1,13 @@
 package com.gvendas.gestaovendas.servico;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gvendas.gestaovendas.dto.venda.ClienteVendaResponseDTO;
 import com.gvendas.gestaovendas.dto.venda.ItemRequestDTO;
@@ -53,12 +54,30 @@ public class VendaServico extends AbstractVendaServico {
 
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public ClienteVendaResponseDTO salvar(Long codigoCliente, VendaRequestDTO vendaDTO) {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
-        validarProdutoExiste(vendaDTO.getItemRequestDTOs());
+        validarProdutoExisteERetirarEstoque(vendaDTO.getItemRequestDTOs());
         Venda vendaSalva = salvarVenda(cliente, vendaDTO);
         return criaClienteVendaResponseDTO(vendaSalva,
                 itemVendaRepositorio.findByVendaPorCodigo(vendaSalva.getCodigo()));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
+    public void deletar(Long codigoVenda){
+        validarVendaExiste(codigoVenda);
+        List<ItemVenda> itensVenda = itemVendaRepositorio.findByVendaPorCodigo(codigoVenda);
+        validarProdutoExisteEDevolverEstoque(itensVenda);
+        itemVendaRepositorio.deleteAll(itensVenda);
+        vendaRepositorio.deleteById(codigoVenda);        
+    }
+
+    private void validarProdutoExisteEDevolverEstoque(List<ItemVenda> itensVenda) {
+        itensVenda.forEach(item -> {
+            Produto produto = produtoServico.validarProdutoExiste(item.getProduto().getCodigo());
+            produto.setQuantidade(produto.getQuantidade()+item.getQuantidade());
+            produtoServico.atualizarQuantidadeDoEstoque(produto);
+        });
     }
 
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaDTO) {
@@ -68,8 +87,21 @@ public class VendaServico extends AbstractVendaServico {
         return vendaSalva;
     }
 
-    private void validarProdutoExiste(List<ItemRequestDTO> itemRequestDTOs) {
-        itemRequestDTOs.forEach(item -> produtoServico.validarProdutoExiste(item.getCodigoProduto()));
+    private void validarProdutoExisteERetirarEstoque(List<ItemRequestDTO> itemRequestDTOs) {
+        itemRequestDTOs.forEach(item -> {
+            Produto produto = produtoServico.validarProdutoExiste(item.getCodigoProduto());
+            validarQuantidadeProdutoExiste(produto, item.getQuantidade());
+            produto.setQuantidade(produto.getQuantidade()-item.getQuantidade());
+            produtoServico.atualizarQuantidadeDoEstoque(produto);
+        });
+    }
+
+    private void validarQuantidadeProdutoExiste(Produto produto, Integer quantidade) {
+        if (produto.getQuantidade() < quantidade) {
+            throw new RegraDeNegocioException(
+                    String.format("Foi pedido %s itens do produto %s, porém há %s disponível em estoque", quantidade,
+                            produto.getDescricao(), produto.getQuantidade()));
+        }
     }
 
     private Venda validarVendaExiste(Long codigoVenda) {

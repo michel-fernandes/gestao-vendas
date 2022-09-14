@@ -34,5 +34,4 @@ public abstract class AbstractVendaServico {
         return new ItemVenda(itemVendaDto.getQuantidade(), itemVendaDto.getPrecoVendido(),
                 new Produto(itemVendaDto.getCodigoProduto()), venda);
     }
-    
 }

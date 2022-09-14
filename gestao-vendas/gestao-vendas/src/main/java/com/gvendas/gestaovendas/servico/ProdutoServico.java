@@ -83,4 +83,8 @@ public class ProdutoServico {
                     String.format("A categoria de código %s informada não existe", codigoCategoria));
         }
     }
+
+    protected void atualizarQuantidadeDoEstoque(Produto produto) {
+        produtoRepositorio.save(produto);
+    }
 }
